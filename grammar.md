@@ -10,7 +10,7 @@ temp2 -> ** str temp2 |
 
 str -> char str2
 
-str -> char str2 |
+str2 -> char str2 |
        e
 
 char -> A-Z |
