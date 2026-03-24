@@ -34,5 +34,17 @@ FIRST(exp) = A-Z , a-z , (
 
 ```
 
+# FOLLOW computation
+```
+FOLLOW(exp)   = $, )
 
+FOLLOW(temp)  = /, $, )
 
+FOLLOW(temp2) = /, $, )
+
+FOLLOW(str)   = **, /, $, )
+
+FOLLOW(str2)  = **, /, $, )
+
+FOLLOW(char)  = A-Z, a-z, (, **, /, $, )
+```
