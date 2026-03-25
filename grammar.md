@@ -32,9 +32,8 @@
 | temp2 | e |   e   | ** str temp2 |     -     |     -     |     -     | e |
 |  temp | - |   -   |      -       | char str2 | char str2 | char str2 | - |
 | temp2 | e |   e   |      e       | char str2 | char str2 | char str2 | e |
-|  char | - |   -   |      -       |    A-Z    |    a-z    |     (     | - |
+|  char | - |   -   |      -       |    A-Z    |    a-z    |  ( exp )  | - |
 +-------+---+-------+--------------+-----------+-----------+-----------+---+
-
 ```
 
 # FIRST compuation
