@@ -1,11 +1,9 @@
 ## Q1 Grammar
 
-Down below there is the finall Transormation and the table if you dont have enough time.
-
+Down below there is the final transormation and the table if you dont have enough time.  
 Below them there is a step by step grammar transformation with the steps followed according to
-the lecturs theory
-
-I also give the computation of FIRST, FOLLOW , FIRST+ functions!!! 
+the lectures theory.    
+I also give the computation of FIRST, FOLLOW , FIRST+ functions!!!   
 
 
 # Grammar after transformation 
@@ -50,7 +48,6 @@ I also give the computation of FIRST, FOLLOW , FIRST+ functions!!!
 
 Steps i followed : 
             - `1) Priorities and ** , / associativity`.The higher the priority -> the depper in the parse tree. '/' has right  
-
             associativity so exp has to be produced by the right of the char.  
 ```
 exp -> str | exp op exp | (exp)     |       exp  -> temp / exp | temp 
