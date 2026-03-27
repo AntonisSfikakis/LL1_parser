@@ -23,12 +23,15 @@ class GrammarEvaluator {
 
   private int lookahead;
 
-  // private StringBuilder sb = new StringBuilder();
-
   public GrammarEvaluator(InputStream in) throws IOException {
     this.in = in;
     lookahead = in.read();
   }
+
+  /*
+   * Read until EOF.
+   * After eval() lookahead == '\n' || -1
+   */
 
   public void run() throws IOException {
     while (lookahead != -1) {
@@ -48,6 +51,9 @@ class GrammarEvaluator {
     }
   }
 
+  /*
+   * consume() -> read next symbol (same from tutorial)
+   */
   private void consume(int symbol) throws IOException, ParseError {
     if (lookahead == symbol)
       lookahead = in.read();
@@ -63,47 +69,64 @@ class GrammarEvaluator {
     return c >= 'a' && c <= 'z';
   }
 
+  /*
+   * eval() -> start strign evaluation based on the table
+   * Call exp().
+   * Recursion builds final string.
+   * StringBuilder used.
+   */
   public StringBuilder eval() throws IOException, ParseError {
     StringBuilder sb = new StringBuilder();
     sb = exp();
 
     if (lookahead != -1 && lookahead != '\n') {
-      // System.err.println(lookahead);
       throw new ParseError();
     }
 
     return sb;
   }
 
-  /* expr -> temp exp2 */
+  /*
+   * Based on the table every function either calls another function either does
+   * nothing either throws an error.
+   *
+   * expr -> temp exp2
+   */
   private StringBuilder exp() throws IOException, ParseError {
 
     if (isCharUpper(lookahead) || isCharDown(lookahead) || lookahead == '(') {
       return exp2(temp());
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* temp -> str temp2 */
+  /*
+   * temp -> str temp2
+   */
   private StringBuilder temp() throws IOException, ParseError {
     if (isCharUpper(lookahead) || isCharDown(lookahead) || lookahead == '(') {
       return temp2(str());
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* str -> char str2 */
+  /*
+   * str -> char str2
+   */
   private StringBuilder str() throws IOException, ParseError {
     if (isCharUpper(lookahead) || isCharDown(lookahead) || lookahead == '(') {
       return str2(chr());
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* char -> A-Z | a-z | (exp) */
+  /*
+   * Here starts the initialazation of the string.
+   * char -> A-Z | a-z | (exp)
+   */
   private StringBuilder chr() throws IOException, ParseError {
     StringBuilder sb = new StringBuilder();
 
@@ -121,11 +144,17 @@ class GrammarEvaluator {
       consume(lookahead);
       return sb;
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* exp2 -> / exp | e */
+  /*
+   * exp2 needs to compute if right part of the / is a suffix.
+   * We need to keep track of the left part which is its argument.
+   * Call Compute which just checks if left is suffix of right
+   *
+   * exp2 -> / exp | e
+   */
   private StringBuilder exp2(StringBuilder left)
       throws IOException, ParseError {
     StringBuilder right = new StringBuilder();
@@ -141,11 +170,20 @@ class GrammarEvaluator {
       // a/b if b is suffix
       return compute(left, right);
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* temp2 -> ** str temp2 | e */
+  /*
+   * if lookahed == '**' tepmp2 has to compute it.
+   * So it takes as an argument the left string.
+   * Calls str() which it produces a string which returns in right
+   * StringBuilder. Then right is added two times in left. Then continue with
+   * temp2 with the new left. If everythin is correct next it should be an non
+   * terminal char.
+   *
+   * temp2 -> ** str temp2 | e
+   */
   private StringBuilder temp2(StringBuilder left)
       throws IOException, ParseError {
     StringBuilder right = new StringBuilder();
@@ -166,11 +204,17 @@ class GrammarEvaluator {
       left.append(right);
       return temp2(left);
     }
-    // System.err.println(lookahead);
+
     throw new ParseError();
   }
 
-  /* str2 -> char str2 */
+  /*
+   * Left argument is the string which is evaluated
+   * Calls chr() and appaends its result.
+   * Continues.
+   *
+   * str2 -> char str2
+   */
   private StringBuilder str2(StringBuilder left)
       throws IOException, ParseError {
 
@@ -190,15 +234,19 @@ class GrammarEvaluator {
     throw new ParseError();
   }
 
-  /* this function takes two strings and computes the suffix */
-  /* left = before / , right = suffix */
-
+  /*
+   * this function takes two strings and computes the suffix *
+   *
+   * left = before / , right = suffix
+   */
   private StringBuilder compute(StringBuilder left, StringBuilder right) {
 
-    /* it devides the main string in two string builders and compares them */
-    // temp1 -> aaaa
-    // temp2 -> a
-    // suffix starts at = 4 - 1 = 3
+    /*
+     * it devides the main string in two string builders and compares them
+     * temp1 -> aaaa
+     * temp2 -> a
+     * suffix starts at = 4 - 1 = 3
+     */
 
     int left_suffix = left.length() - right.length();
     if (left_suffix < 0)
