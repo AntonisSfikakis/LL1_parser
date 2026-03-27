@@ -47,7 +47,7 @@ I also give the computation of FIRST, FOLLOW , FIRST+ functions!!!
 # STEP BY STEP TRANFORMATION
 
 Steps i followed : 
-            - `1) Priorities and ** , / associativity`.The higher the priority -> the depper in the parse tree. '/' has right  
+- `1) Priorities and ** , / associativity`.The higher the priority -> the depper in the parse tree. '/' has right  
             associativity so exp has to be produced by the right of the char.  
 
 ```
@@ -57,7 +57,7 @@ str -> char | char str              | ----> str  -> char str | char
 char -> a-z | A-Z                   |       char -> a-z | A-Z | (exp)
 ```
 
-            - `2) Left recursion out`. LL1 does not like it    
+- `2) Left recursion out`. LL1 does not like it    
 
 ```
 exp  -> exp / temp | temp           |       exp   -> temp / exp | temp
@@ -67,7 +67,7 @@ char -> a-z | A-Z | (exp)           |       str   -> char str | char
                                     |       char  -> A-Z | a-z | (exp)
 ```  
 
-            - `3) Left refctoring`. FIRST+!  
+- `3) Left refctoring`. FIRST+!  
 
 ```
 exp   -> temp / exp | temp          |       exp   -> temp exp2
