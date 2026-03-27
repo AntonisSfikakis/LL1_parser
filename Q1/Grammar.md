@@ -65,7 +65,7 @@ temp -> temp ** str | str           |       temp  -> str temp2
 str  -> char str | char             | ----> temp2 -> ** str temp2 | e
 char -> a-z | A-Z | (exp)           |       str   -> char str | char
                                     |       char  -> A-Z | a-z | (exp)
-```
+```  
 
             - `3) Left refctoring`. FIRST+!  
 
