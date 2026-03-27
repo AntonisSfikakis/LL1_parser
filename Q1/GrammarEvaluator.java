@@ -41,7 +41,7 @@ class GrammarEvaluator {
       try {
         System.out.println(eval());
       } catch (ParseError e) {
-        System.err.print(e.getMessage());
+        System.err.println(e.getMessage());
         while (lookahead != '\n' && lookahead != -1)
           lookahead = in.read();
       }
