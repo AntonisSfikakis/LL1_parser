@@ -1,9 +1,5 @@
-import java.awt.image.renderable.ParameterBlock;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.swing.LookAndFeel;
-import sun.jvm.hotspot.debugger.cdbg.LoadObjectComparator;
-import sun.tools.jstat.Parser;
 
 /*
 
@@ -41,31 +37,31 @@ class GrammarEvaluator {
       throw new ParseError();
   }
 
-  private boolean isCharUpper(int c) {
-    return c >= 'A' && c <= 'Z';
-  }
+  private boolean isCharUpper(int c) { return c >= 'A' && c <= 'Z'; }
 
-  private boolean isCharDown(int c) {
-    return c >= 'a' && c <= 'z';
-  }
+  private boolean isCharDown(int c) { return c >= 'a' && c <= 'z'; }
 
-  public void eval() throws IOException, ParseError {
+  public StringBuilder eval() throws IOException, ParseError {
+
     exp();
 
-    if (lookahead != -1 && lookahead != '\n')
+    if (lookahead != -1 && lookahead != '\n') {
+      //System.err.println(lookahead);
       throw new ParseError();
+    }
 
-    return;
+    return sb;
   }
 
   /* expr -> temp exp2 */
   private void exp() throws IOException, ParseError {
+
     if (isCharUpper(lookahead) || isCharDown(lookahead) || lookahead == '(') {
       temp();
       exp2();
       return;
     }
-
+    //System.err.println(lookahead);
     throw new ParseError();
   }
 
@@ -76,7 +72,7 @@ class GrammarEvaluator {
       temp2();
       return;
     }
-
+    //System.err.println(lookahead);
     throw new ParseError();
   }
 
@@ -87,7 +83,7 @@ class GrammarEvaluator {
       str2();
       return;
     }
-
+    //System.err.println(lookahead);
     throw new ParseError();
   }
 
@@ -103,10 +99,11 @@ class GrammarEvaluator {
     }
 
     if (isCharDown(lookahead) || isCharUpper(lookahead)) {
-      sb.append(lookahead);
+      sb.append((char)lookahead);
       consume(lookahead);
       return;
     }
+    //System.err.println(lookahead);
     throw new ParseError();
   }
 
@@ -115,8 +112,9 @@ class GrammarEvaluator {
     if (lookahead == ')' || lookahead == -1 || lookahead == '\n')
       return;
 
+aaaaa/aa/a
     if (lookahead == '/') {
-      sb.append(lookahead);
+      sb.append((char)lookahead);
       consume(lookahead);
       exp();
       sb = compute();
@@ -125,24 +123,52 @@ class GrammarEvaluator {
       // a/b if b is suffix
       return;
     }
-
+    //System.err.println(lookahead);
     throw new ParseError();
   }
 
   /* temp2 -> ** str temp2 | e */
   private void temp2() throws IOException, ParseError {
-    if (lookahead == ')' || lookahead == -1 || lookahead == '\n')
+    if (lookahead == ')' || lookahead == -1 || lookahead == '\n' || lookahead == '/')
       return;
 
     if (lookahead == '*') {
       sb.append(lookahead);
-      consume(lookahead); 
-       
+      consume(lookahead);
+
+      if (lookahead != '*')
+        throw new ParseError();
+
+      sb.append(lookahead);
+      consume(lookahead);
+
+      str();
+      temp2();
+      return;
+      // sb = concat();
     }
+    //System.err.println(lookahead);
+    throw new ParseError();
   }
 
   /* str2 -> char str2 */
   private void str2() throws IOException, ParseError {
+    if (lookahead == -1 || lookahead == '\n' || lookahead == '/' ||
+        lookahead == ')')
+      return;
+    if (lookahead == '*') {
+      consume(lookahead);
+      if (lookahead == '*')
+        return;
+      throw new ParseError();
+    }
+
+    if (isCharDown(lookahead) || isCharUpper(lookahead) || lookahead == '(') {
+      chr();
+      str2();
+      return;
+    }
+    throw new ParseError();
   }
 
   /* this function takes two strings and computes the suffix */
@@ -181,4 +207,6 @@ class GrammarEvaluator {
 
     return new StringBuilder(left.substring(0, left_suffix));
   }
+
+  private void concat() { return; }
 }
