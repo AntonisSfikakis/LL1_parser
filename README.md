@@ -5,7 +5,7 @@ H1 is divided in two parts
 
 Q1 contains :  
     - `Grammar.md` - IMPORTANT READ THIS FIRST. Grammar Table , First+, First, Follow functions, Step by Step transformation  
-    - `Q1_Readme.md` - How to run the java files and implementation details  
+    - `Q1/README.md` - How to run the java files and implementation details  
     - `Main.java` - Entry point  
     - `GrammarEvaluator.java` - LL1 Parser  
     - `ParseError.java` - Parse error message  
