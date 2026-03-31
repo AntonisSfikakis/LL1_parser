@@ -1,17 +1,16 @@
-import java_cup.runtime.*;
+
 %%
 
 %class Scanner
 %line
 %column
-%cup
+%standalone
 %unicode
 
 
 
 %{
-  StringBuffer stringBuffer = new StringBuffer();
-
+StringBuffer stringBuffer = new StringBuffer();
   private Symbol symbol(int type) {
     return new Symbol(type, yyline, yycolumn);
   }
@@ -23,6 +22,7 @@ import java_cup.runtime.*;
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 Identifier     = [a-zA-Z_][a-zA-Z0-9_]*
+String         = \"[^\"]*\"
 If             = if
 else           = else
 prefix         = prefix
@@ -32,20 +32,19 @@ suffix         = suffix
 %%
 
 <YYINITIAL> {
-
-  \"                { stringBuffer.setLength(0); yybegin(STRING)  } 
-  "("               { return symbol(sym.LPAR); }
-  ")"               { return symbol(sym.RPAR); }
-  "+"               { return symbol(sym.CONCAT); }
-  ","               { return symbol(sym.COMMA); }
-  "{"               { return symbol(sym.LBRACK); }
-  "}"               { return symbol(sym.RBRACK); }
-  {If}              { return symbol(sym.IF); }
-  {else}            { return symbol(sym.ELSE); }
-  {prefix}          { return symbol(sym.PREFIX); }
-  {suffix}          { return symbol(sym.SUFFIX); }
-  {Identifier}      { return symbol(sym.ID, yytext()); }
-  {WhiteSpace}      { /* do nothing */ }
+"("               { System.out.println("("); }
+")"               { System.out.println(")"); }
+"+"               { System.out.println("+"); }
+","               { System.out.println(","); }
+"{"               { System.out.println("{"); }
+"}"               { System.out.println("}"); }
+{If}              { System.out.println("if"); }
+{else}            { System.out.println("else"); }
+{prefix}          { System.out.println("prefix"); }
+{suffix}          { System.out.println("suffix"); }
+{Identifier}      { System.out.println(yytext()); }
+{String}          { System.out.println(yytext()); }
+{WhiteSpace}      { /* do nothing */ }
 
 }
 
