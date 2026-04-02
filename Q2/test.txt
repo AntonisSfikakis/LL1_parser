@@ -1,5 +1,0 @@
-name()
-if () {}
-,
-else (hallo_world)
-

@@ -1,0 +1,90 @@
+import java_cup.runtime.*;
+import java.io.*;
+
+action code {:
+    StringBuilder decls = new StringBuilder();
+    StringBuilder calls = new StringBuilder();
+:};
+
+parser code
+     {:
+        private Scanner s;
+        Parser(Scanner s) { this.s = s; }
+:};
+
+/* define how to connect to the scanner! */
+scan with {: return s.next_token(); :};
+
+
+/* symbol list */
+
+terminal  LPAR, RPAR, CONCAT, COMMA, LBRACK, RBRACK, IF, ELSE, PREFIX, SUFFIX;
+
+terminal String ID, STRING_LITERAL;
+
+non terminal String entry, program,  params, params_list,  args, args_list, expr, concat_expr, atom, condition;
+
+
+/* Grammar Implemenatation */
+entry ::= program {:
+                     RESULT = "public class Output {\n";
+                     RESULT +="    public static void main(String[] args) {\n";
+                     RESULT += calls.toString(); 
+                     RESULT +="    }\n";
+                     RESULT += decls.toString();
+                     RESULT += "}\n";
+                     System.out.println(RESULT);
+
+                  :}
+                  ;
+
+program ::= program ID:id LPAR params:p RPAR LBRACK expr:e RBRACK {: decls.append("\n    public static String " + id + "(" + p + ") " + "{\n" + "      return " + e + ";" + "\n    }\n"); :}
+          | program ID:id LPAR args:a RPAR                        {: calls.append("        System.out.println(" + id + "(" + a + ")" + ");\n"); :}
+          | program ID:id LPAR RPAR LBRACK expr:e RBRACK          {: decls.append("\n    public static String " + id + "(" + ") " + "{\n" + "      return " + e + ";" + "  \n    }\n"); :} 
+          | program ID:id LPAR RPAR                               {: calls.append("        System.out.println(" + id + "(" + ")" + ");\n"); :}
+          | {: :}
+       ;
+                                                                        
+
+params ::= params_list:p_list {: RESULT = p_list; :} 
+;
+
+params_list ::= ID:id COMMA params_list:p_list {: RESULT = "String " + id + ", " + p_list; :} 
+              | ID:id                          {: RESULT = "String " + id; :}
+;
+
+
+
+
+args ::= args_list:a_list {: RESULT = a_list; :}
+       |                  {: RESULT = "";     :}
+;
+
+args_list ::= expr:e COMMA args_list:a_list {: RESULT = e + ", " + a_list; :}
+                                | expr:e    {: RESULT = e; :}
+;
+
+
+atom ::= ID:id                {: RESULT = id; :} 
+     | STRING_LITERAL:str     {: RESULT = "\"" + str + "\""; :}
+     | ID:id LPAR args:a RPAR {: RESULT = id + "(" + a + ")"; :}      
+;
+
+concat_expr ::= CONCAT atom:at concat_expr:con {: RESULT = " + " + at + con; :} 
+                                             | {: RESULT = ""; :} 
+;
+
+expr ::= IF LPAR condition:cond RPAR expr:e1 ELSE expr:e2  {: RESULT = cond + " ? " + "(" + e1 + ")" + " : " + e2; :}
+                              | atom:at concat_expr:conc {: RESULT = at + conc; :}
+;
+
+
+
+
+condition ::= atom:a1 PREFIX atom:a2 {: RESULT = a2 + ".startsWith(" + a1 + ")"; :}
+            | atom:a1 SUFFIX atom:a2 {: RESULT = a2 + ".endsWith(" + a1 + ")";:}
+;
+
+
+
+
