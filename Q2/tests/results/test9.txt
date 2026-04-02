@@ -1,0 +1,11 @@
+yes
+starts with Java
+no
+functional
+not functional
+JVM
+other
+Language: Java Family: JVM Functional: not functional
+Language: Kotlin Family: JVM Functional: not functional
+Language: Haskell Family: other Functional: functional
+Language: Python Family: other Functional: not functional

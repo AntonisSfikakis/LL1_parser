@@ -1,0 +1,14 @@
+upper(x) {
+    x + "!"
+}
+
+wrap(x) {
+    "[" + x + "]"
+}
+
+both(x) {
+    wrap(upper(x))
+}
+
+both("hello")
+both("world")

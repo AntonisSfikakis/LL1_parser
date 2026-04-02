@@ -46,6 +46,7 @@ suffix         = suffix
   {suffix}          { return symbol(sym.SUFFIX);                   }
   {Identifier}      { return symbol(sym.ID, yytext());             }
   {WhiteSpace}      { /* do nothing */                             }
+  <<EOF>>           { return symbol(sym.EOF);                      }
 
 }
 

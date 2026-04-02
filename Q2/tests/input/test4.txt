@@ -1,0 +1,9 @@
+cond(x) {
+    if (x prefix "yes")
+        "positive"
+    else
+        "negative"
+}
+
+cond("yes")
+cond("no")

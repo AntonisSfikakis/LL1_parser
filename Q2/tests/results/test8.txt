@@ -1,0 +1,12 @@
+yes
+no
+pre only
+post only
+pre only
+no prefix
+previewing
+negated: unbelievable
+negated: undefined
+unknown: running
+unknown: education
+unknown: hello

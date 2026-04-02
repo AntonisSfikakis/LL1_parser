@@ -1,0 +1,16 @@
+deep(a, b, c) {
+    if (a prefix b)
+        if (b prefix c)
+            if (c suffix a)
+                "all match"
+            else
+                "two match"
+        else
+            "one match"
+    else
+        "no match"
+}
+
+deep("he", "hello", "worldhe")
+deep("he", "world", "test")
+deep("he", "hello", "test")

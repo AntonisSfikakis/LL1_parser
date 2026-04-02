@@ -10,6 +10,17 @@ parser code
      {:
         private Scanner s;
         Parser(Scanner s) { this.s = s; }
+
+        private String toParams(String args) {
+         if (args.isEmpty()) return "";
+           String[] parts = args.split(", ");
+           StringBuilder sb = new StringBuilder();
+           for (int i = 0; i < parts.length; i++) {
+             if (i > 0) sb.append(", ");
+             sb.append("String ").append(parts[i].trim());
+          }
+        return sb.toString();
+      }
 :};
 
 /* define how to connect to the scanner! */
@@ -22,12 +33,12 @@ terminal  LPAR, RPAR, CONCAT, COMMA, LBRACK, RBRACK, IF, ELSE, PREFIX, SUFFIX;
 
 terminal String ID, STRING_LITERAL;
 
-non terminal String entry, program,  params, params_list,  args, args_list, expr, concat_expr, atom, condition;
+non terminal String entry, program, args, args_list, expr, concat_expr, atom, condition;
 
 
 /* Grammar Implemenatation */
 entry ::= program {:
-                     RESULT = "public class Output {\n";
+                     RESULT = "public class Main {\n";
                      RESULT +="    public static void main(String[] args) {\n";
                      RESULT += calls.toString(); 
                      RESULT +="    }\n";
@@ -38,7 +49,7 @@ entry ::= program {:
                   :}
                   ;
 
-program ::= program ID:id LPAR params:p RPAR LBRACK expr:e RBRACK {: decls.append("\n    public static String " + id + "(" + p + ") " + "{\n" + "      return " + e + ";" + "\n    }\n"); :}
+program ::= program ID:id LPAR args:a RPAR LBRACK expr:e RBRACK {: decls.append("\n    public static String " + id + "(" + toParams(a) + ") " + "{\n" + "      return " + e + ";" + "\n    }\n"); :}
           | program ID:id LPAR args:a RPAR                        {: calls.append("        System.out.println(" + id + "(" + a + ")" + ");\n"); :}
           | program ID:id LPAR RPAR LBRACK expr:e RBRACK          {: decls.append("\n    public static String " + id + "(" + ") " + "{\n" + "      return " + e + ";" + "  \n    }\n"); :} 
           | program ID:id LPAR RPAR                               {: calls.append("        System.out.println(" + id + "(" + ")" + ");\n"); :}
@@ -46,12 +57,6 @@ program ::= program ID:id LPAR params:p RPAR LBRACK expr:e RBRACK {: decls.appen
        ;
                                                                         
 
-params ::= params_list:p_list {: RESULT = p_list; :} 
-;
-
-params_list ::= ID:id COMMA params_list:p_list {: RESULT = "String " + id + ", " + p_list; :} 
-              | ID:id                          {: RESULT = "String " + id; :}
-;
 
 
 
@@ -65,9 +70,9 @@ args_list ::= expr:e COMMA args_list:a_list {: RESULT = e + ", " + a_list; :}
 ;
 
 
-atom ::= ID:id                {: RESULT = id; :} 
-     | STRING_LITERAL:str     {: RESULT = "\"" + str + "\""; :}
-     | ID:id LPAR args:a RPAR {: RESULT = id + "(" + a + ")"; :}      
+atom ::= ID:id                  {: RESULT = id; :} 
+       | STRING_LITERAL:str     {: RESULT = "\"" + str + "\""; :}
+       | ID:id LPAR args:a RPAR {: RESULT = id + "(" + a + ")"; :}      
 ;
 
 concat_expr ::= CONCAT atom:at concat_expr:con {: RESULT = " + " + at + con; :} 
@@ -75,7 +80,7 @@ concat_expr ::= CONCAT atom:at concat_expr:con {: RESULT = " + " + at + con; :}
 ;
 
 expr ::= IF LPAR condition:cond RPAR expr:e1 ELSE expr:e2  {: RESULT = cond + " ? " + "(" + e1 + ")" + " : " + e2; :}
-                              | atom:at concat_expr:conc {: RESULT = at + conc; :}
+       | atom:at concat_expr:conc                          {: RESULT = at + conc; :}
 ;
 
 

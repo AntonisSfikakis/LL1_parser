@@ -1,0 +1,60 @@
+isJava(name) {
+    if ("Java" prefix name)
+        if (name suffix "Java")
+            "yes"
+        else
+            "starts with Java"
+    else
+        "no"
+}
+
+isFunctional(name) {
+    if ("Haskell" prefix name)
+        "functional"
+    else
+        if ("Erlang" prefix name)
+            "functional"
+        else
+            if ("Clojure" prefix name)
+                "functional"
+            else
+                "not functional"
+}
+
+getFamily(name) {
+    if ("Java" prefix name)
+        "JVM"
+    else
+        if ("Kotlin" prefix name)
+            "JVM"
+        else
+            if ("Scala" prefix name)
+                "JVM"
+            else
+                if ("Clojure" prefix name)
+                    "JVM"
+                else
+                    "other"
+}
+
+describe(name) {
+    if ("Java" prefix name)
+        "Language: " + name + " Family: " + getFamily(name) + " Functional: " + isFunctional(name)
+    else
+        if ("Kotlin" prefix name)
+            "Language: " + name + " Family: " + getFamily(name) + " Functional: " + isFunctional(name)
+        else
+            "Language: " + name + " Family: " + getFamily(name) + " Functional: " + isFunctional(name)
+}
+
+isJava("Java")
+isJava("Javascript")
+isJava("Python")
+isFunctional("Haskell")
+isFunctional("Python")
+getFamily("Kotlin")
+getFamily("Python")
+describe("Java")
+describe("Kotlin")
+describe("Haskell")
+describe("Python")

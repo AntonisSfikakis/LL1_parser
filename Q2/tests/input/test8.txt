@@ -1,0 +1,68 @@
+startsWith(a, b) {
+    if (a prefix b)
+        "yes"
+    else
+        "no"
+}
+
+endsWith(a, b) {
+    if (a suffix b)
+        "yes"
+    else
+        "no"
+}
+
+classify(word) {
+    if ("pre" prefix word)
+        if (word suffix "ing")
+            "pre and ing"
+        else
+            if (word suffix "ed")
+                "pre and ed"
+            else
+                "pre only"
+    else
+        if ("post" prefix word)
+            if (word suffix "ing")
+                "post and ing"
+            else
+                "post only"
+        else
+            "no prefix"
+}
+
+buildWord(pre, root, suf) {
+    pre + root + suf
+}
+
+analyze(word) {
+    if ("un" prefix word)
+        if (word suffix "able")
+            "negated ability: " + word
+        else
+            if (word suffix "ed")
+                "negated past: " + word
+            else
+                "negated: " + word
+    else
+        if (word suffix "tion")
+            "noun: " + word
+        else
+            if (word suffix "ing")
+                "verb: " + word
+            else
+                "unknown: " + word
+}
+
+startsWith("pre", "preview")
+endsWith("playing", "ing")
+classify("preview")
+classify("posting")
+classify("predetermined")
+classify("random")
+buildWord("pre", "view", "ing")
+analyze("unbelievable")
+analyze("undefined")
+analyze("running")
+analyze("education")
+analyze("hello")
