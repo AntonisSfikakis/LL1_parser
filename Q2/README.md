@@ -57,7 +57,7 @@ make
 ```bash
 make run < input.txt
 ```
-
+Generated files go to `gen/`.  
 The translated `Main.java` is written to `output/`, compiled, and executed automatically.
 
 ### Run tests
