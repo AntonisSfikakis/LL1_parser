@@ -65,7 +65,9 @@ The translated `Main.java` is written to `output/`, compiled, and executed autom
 make test
 ```
 
-Runs all test files from `tests/input/`, translates each one, compiles and executes the result, and prints the output.
+Runs all test files from `tests/input/`, translates each one, compiles and executes the result, and prints the output.  
+Check the Parsed generated java code in `test/test_java_code` after running `make test`.  
+Also all the results from my tests are in the `test/results`  
 
 ### Clean generated files
 ```bash
