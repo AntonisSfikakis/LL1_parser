@@ -1,8 +1,0 @@
-if ("Java" prefix "Javascript")
-    "yes"
-else
-    "no"
-
-name() { "John" }
-name() + " Doe"
-

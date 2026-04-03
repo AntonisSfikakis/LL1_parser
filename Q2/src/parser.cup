@@ -4,6 +4,7 @@ import java.io.*;
 action code {:
     StringBuilder decls = new StringBuilder();
     StringBuilder calls = new StringBuilder();
+    boolean seenStatement = false;
 :};
 
 parser code {:
@@ -30,18 +31,14 @@ entry ::= program {:
                   :}
                   ;
 
-program ::= program ID:id LPAR params_list:p LBRACK expr:e RBRACK
-              {: decls.append("\n    public static String " + id + "(" + p + ") {\n" + "      return " + e + ";\n    }\n"); :}
-          | program ID:id LPAR RPAR LBRACK expr:e RBRACK
-              {: decls.append("\n    public static String " + id + "() {\n" + "      return " + e + ";\n    }\n"); :}
-          | program ID:id LPAR args:a RPAR concat_expr:c
-              {: calls.append("        System.out.println(" + id + "(" + a + ")" + c + ");\n"); :}
-          | program ID:id LPAR RPAR concat_expr:c
-              {: calls.append("        System.out.println(" + id + "()" + c + ");\n"); :}
-          | program STRING_LITERAL:s concat_expr:c
-              {: calls.append("        System.out.println(\"" + s + "\"" + c + ");\n"); :}
-          | program IF LPAR condition:cond RPAR expr:e1 ELSE expr:e2
-              {: calls.append("        System.out.println(" + cond + " ? (" + e1 + ") : " + e2 + ");\n"); :}
+program ::= program ID:id LPAR params_list:p LBRACK expr:e RBRACK    {: if (seenStatement) throw new Exception("Parse error");
+                                                                     decls.append("\n    public static String " + id + "(" + p + ") {\n" + "      return " + e + ";\n    }\n"); :}
+          | program ID:id LPAR RPAR LBRACK expr:e RBRACK             {:  if (seenStatement) throw new Exception("Parse error");
+                                                                      decls.append("\n    public static String " + id + "() {\n" + "      return " + e + ";\n    }\n"); :}
+          | program ID:id LPAR args:a RPAR concat_expr:c             {: seenStatement = true; calls.append("        System.out.println(" + id + "(" + a + ")" + c + ");\n"); :}
+          | program ID:id LPAR RPAR concat_expr:c                    {: seenStatement = true; calls.append("        System.out.println(" + id + "()" + c + ");\n"); :}
+          | program STRING_LITERAL:s concat_expr:c                   {: seenStatement = true; calls.append("        System.out.println(\"" + s + "\"" + c + ");\n"); :}
+          | program IF LPAR condition:cond RPAR expr:e1 ELSE expr:e2 {: seenStatement = true; calls.append("        System.out.println(" + cond + " ? (" + e1 + ") : " + e2 + ");\n"); :}
           | {: :}
        ;
 

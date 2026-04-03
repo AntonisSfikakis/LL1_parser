@@ -12,9 +12,9 @@ TEST_JAVA_CODE = $(TEST_DIR)/tests_java_code
 all: compile
 
 compile: | $(GEN_DIR)
-	@ java -jar $(JFLEX) -d $(GEN_DIR) src/scanner.flex > /dev/null 2>&1
-	@ java -jar $(JCUP) -parser Parser -symbols sym -expect 3 -nowarn -destdir $(GEN_DIR) src/parser.cup 2>/dev/null
-	@ javac -cp $(JCUP_RUNTIME) -d $(GEN_DIR) src/Runner.java $(GEN_DIR)/Parser.java $(GEN_DIR)/Scanner.java $(GEN_DIR)/sym.java 2>/dev/null
+	@ java -jar $(JFLEX) -d $(GEN_DIR) src/scanner.flex  > /dev/null 2>&1
+	@ java -jar $(JCUP) -parser Parser -symbols sym -expect 3 -nowarn -destdir $(GEN_DIR) src/parser.cup   2>/dev/null
+	@ javac -cp $(JCUP_RUNTIME) -d $(GEN_DIR) src/Runner.java $(GEN_DIR)/Parser.java $(GEN_DIR)/Scanner.java $(GEN_DIR)/sym.java  2>/dev/null
 
 run: compile | $(OUTPUT_DIR)
 	@ java -cp $(GEN_DIR):$(JCUP_RUNTIME) Runner > $(OUTPUT_DIR)/Main.java 
