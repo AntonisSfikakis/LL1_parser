@@ -1,0 +1,4 @@
+a**b**c
+aaaaa/aa/a
+(aaaa/aa)/a
+abb**cc/c

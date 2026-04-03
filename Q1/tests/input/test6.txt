@@ -1,0 +1,3 @@
+(a**b)/ab
+(ab**c)/(bcc)
+((a**b)**c)/(abcc)
