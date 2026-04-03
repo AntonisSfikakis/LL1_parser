@@ -1,14 +1,24 @@
-## H1 
-Antonis Sfikakis - sdi2200178
+# Compilers Homework 1
+**Antonis Sfikakis** — sdi2200178
 
-H1 is divided in two parts 
+---
 
-Q1 contains :  
-    - `Grammar.md` - IMPORTANT READ THIS FIRST. Grammar Table , First+, First, Follow functions, Step by Step transformation  
-    - `Q1/README.md` - How to run the java files and implementation details  
-    - `Main.java` - Entry point  
-    - `GrammarEvaluator.java` - LL1 Parser  
-    - `ParseError.java` - Parse error message  
+## Structure
 
-Q2 : contains everything about the second part
+### Q1 — LL(1) String Expression Parser
+| File | Description |
+|---|---|
+| `Grammar.md` | Grammar transformation, FIRST/FOLLOW/FIRST+ sets, parse table |
+| `README.md` | Build instructions and implementation details |
+| `src/Main.java` | Entry point |
+| `src/GrammarEvaluator.java` | Recursive descent LL(1) parser |
+| `src/ParseError.java` | Parse error exception |
 
+### Q2 — String Language to Java Translator
+| File | Description |
+|---|---|
+| `README.md` | Build instructions and implementation details |
+| `src/Runner.java` | Entry point |
+| `src/scanner.flex` | JFlex lexer specification |
+| `src/parser.cup` | JavaCUP grammar and translator |
+| `lib/` | JavaCUP and JFlex jars |

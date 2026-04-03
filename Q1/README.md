@@ -70,6 +70,8 @@ make clean
 ## The Language
 
 > Note: Read Grammar.md for further explanationabout the logic of grammar implementation.  
+
+
 The language evaluates string expressions. All values are strings. One expression per line.
 
 | Operation | Syntax | Meaning |
