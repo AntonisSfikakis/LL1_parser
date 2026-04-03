@@ -48,6 +48,9 @@ Generated files go to `gen/`, translated output goes to `output/`, test results 
 
 ## How to Execute
 
+> **Note:** All warning and informational messages from the parser are suppressed.  
+> Only the translated Java program is written to stdout. Parse errors are written to stderr.  
+
 ### Compile
 ```bash
 make
