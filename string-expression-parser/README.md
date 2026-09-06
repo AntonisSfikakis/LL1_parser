@@ -22,7 +22,7 @@ Java 11 or higher. No external libraries required.
 ## Project Structure
 
 ```
-Q1/
+string-expression-parser/
 ├── src/
 │   ├── Main.java               ← Entry point
 │   ├── GrammarEvaluator.java   ← Recursive descent parser and evaluator
@@ -69,8 +69,7 @@ make clean
 
 ## The Language
 
-> Note: Read Grammar.md for further explanationabout the logic of grammar implementation.  
-
+> Note: Read Grammar.md for further explanation about the logic of grammar implementation.
 
 The language evaluates string expressions. All values are strings. One expression per line.
 

@@ -8,6 +8,7 @@ A translator from a custom string-manipulation language to executable Java code,
 - [How to Execute](#how-to-execute)
 - [The Language](#the-language)
 - [Example Programs](#example-programs)
+- [Implementation Notes](#implementation-notes)
 
 ---
 
@@ -27,7 +28,7 @@ Java 11 or higher is required.
 ## Project Structure
 
 ```
-Q2/
+string-to-java-translator/
 ├── src/
 │   ├── scanner.flex      ← JFlex lexer specification
 │   ├── parser.cup        ← JavaCUP grammar and translator
@@ -44,12 +45,14 @@ Q2/
 
 Generated files go to `gen/`, translated output goes to `output/`, test results go to `tests/results/`.
 
+> **Note:** the `Makefile` refers to the jars as `../lib/...`. If you run `make` from `Q2/` as described below and it can't find the jars, change `LIB_DIR` in the `Makefile` to `lib` instead of `../lib`.
+
 ---
 
 ## How to Execute
 
-> **Note:** All warning and informational messages from the parser are suppressed.  
-> Only the translated Java program is written to stdout. Parse errors are written to stderr.  
+> **Note:** All warning and informational messages from the parser are suppressed.
+> Only the translated Java program is written to stdout. Parse errors are written to stderr.
 
 ### Compile
 ```bash
@@ -60,7 +63,7 @@ make
 ```bash
 make run < input.txt
 ```
-Generated files go to `gen/`.  
+Generated files go to `gen/`.
 The translated `Main.java` is written to `output/`, compiled, and executed automatically.
 
 ### Run tests
@@ -68,9 +71,9 @@ The translated `Main.java` is written to `output/`, compiled, and executed autom
 make test
 ```
 
-Runs all test files from `tests/input/`, translates each one, compiles and executes the result, and prints the output.  
-Check the Parsed generated java code in `test/test_java_code` after running `make test`.  
-Also all the results from my tests are in the `test/results`  
+Runs all test files from `tests/input/`, translates each one, compiles and executes the result, and prints the output.
+Check the generated Java code for each test in `tests/tests_java_code/` after running `make test`.
+The captured output of each test run is in `tests/results/`.
 
 ### Clean generated files
 ```bash
@@ -107,6 +110,9 @@ else
 ```
 
 Operator precedence: `if` < `+` (concatenation has higher precedence).
+
+### String literals
+String literals support the escape sequences `\t`, `\n`, `\r`, `\"`, and `\\`.
 
 ---
 
@@ -195,3 +201,17 @@ public class Main {
     }
 }
 ```
+
+---
+
+## Implementation Notes
+
+**Single-pass, syntax-directed translation.** There's no separate AST or code-generation pass — the JavaCUP grammar's own semantic actions build the output Java source directly while parsing, accumulating it into two `StringBuilder`s: one for function declarations (`decls`), one for the top-level `System.out.println` calls (`calls`). The two are stitched together into the final `Main` class once parsing completes.
+
+**Declaration-before-statement ordering is enforced by the parser, not just documented.** A `seenStatement` flag is set the first time a top-level call or if-statement is parsed; if a function declaration production fires after that flag is set, the parser throws immediately. This directly enforces the language rule that all declarations must precede all statements, rather than leaving it as an unchecked convention.
+
+**`prefix`/`suffix` map directly to Java's `String` methods**, with the operand order matching Java's method-receiver convention: `a prefix b` (is `a` a prefix of `b`) compiles to `b.startsWith(a)`, and `a suffix b` to `b.endsWith(a)`.
+
+**`if`/`else` compiles to Java's ternary operator** (`cond ? e1 : e2`), using the exact same translation whether the conditional appears as a full top-level statement or nested inside another expression.
+
+**The grammar has 3 known shift/reduce conflicts**, explicitly acknowledged via JavaCUP's `-expect 3` flag rather than silently ignored. This is consistent with the classic dangling-else style ambiguity, since `if`/`else` appears both as a top-level statement and as a nested expression form. *(Worth confirming the exact conflict report before citing this precisely — run javacup on `parser.cup` without `-nowarn` to see the details.)*
