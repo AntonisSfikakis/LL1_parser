@@ -1,4 +1,4 @@
-LIB_DIR = ../lib
+LIB_DIR = lib
 JFLEX = $(LIB_DIR)/jflex-full-1.9.1.jar
 JCUP_RUNTIME = $(LIB_DIR)/java-cup-11b-runtime.jar
 JCUP = $(LIB_DIR)/java-cup-11b.jar
